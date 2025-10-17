@@ -121,4 +121,4 @@ const getStatistics = async () => {
   };
 };
 
-export { saveScrapedData, getAllData, getDataById, deleteData, getStatistics, getSupabaseClient };
+export { saveScrapedData, getAllData, getDataById, deleteData, getStatistics };
