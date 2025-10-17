@@ -72,4 +72,53 @@ const getDataById = async (id) => {
   return data;
 };
 
-export { saveScrapedData, getAllData, getDataById };
+const deleteData = async (id) => {
+  const supabase = getSupabaseClient();
+  
+  const { error } = await supabase
+    .from('scraped_data')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+  return { success: true };
+};
+
+const getStatistics = async () => {
+  const supabase = getSupabaseClient();
+  
+  // Get total count
+  const { count: totalCount, error: countError } = await supabase
+    .from('scraped_data')
+    .select('*', { count: 'exact', head: true });
+
+  if (countError) throw countError;
+
+  // Get unique URLs count
+  const { data: urlData, error: urlError } = await supabase
+    .from('scraped_data')
+    .select('url');
+
+  if (urlError) throw urlError;
+
+  const uniqueUrls = new Set(urlData.map(item => item.url)).size;
+
+  // Get recent scrapes (last 24 hours)
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const { count: recentCount, error: recentError } = await supabase
+    .from('scraped_data')
+    .select('*', { count: 'exact', head: true })
+    .gte('created_at', yesterday.toISOString());
+
+  if (recentError) throw recentError;
+
+  return {
+    totalScraped: totalCount || 0,
+    uniqueUrls: uniqueUrls || 0,
+    recentScrapes: recentCount || 0
+  };
+};
+
+export { saveScrapedData, getAllData, getDataById, deleteData, getStatistics };
