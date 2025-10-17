@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test:local": "netlify dev",
+    "test:scrape": "curl -X POST http://localhost:8888/.netlify/functions/scrape -H 'Content-Type: application/json' -d '{\"url\":\"https://example.com\",\"analyzeWithAI\":true}'",
+    "test:preview": "curl -X POST http://localhost:8888/.netlify/functions/preview -H 'Content-Type: application/json' -d '{\"url\":\"https://example.com\",\"analyzeWithAI\":true}'",
+    "test:data": "curl http://localhost:8888/.netlify/functions/data?page=1&limit=5"
+  }
+}

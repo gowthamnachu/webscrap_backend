@@ -1,0 +1,3 @@
+# Render.com deployment configuration for backend
+buildCommand: npm install
+startCommand: npm start
